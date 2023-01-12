@@ -7,5 +7,13 @@ export interface ITime {
 
 export interface IMessage {
     message: any;
-    type: any;
+    status: any;
+}
+
+export interface IStoreLocalStorage {
+    storageKey: string;
+    value: any;
+}
+export interface IGetLocalStorage {
+    storageKey: string;
 }

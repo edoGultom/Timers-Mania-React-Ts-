@@ -12,7 +12,7 @@ let Timer: React.FC = () => {
 
     //cek data ada tidak di local storage
     useEffect(() => {
-        getData({ key: 'times' }).then(res => {
+        getData({ storageKey: 'times' }).then(res => {
             if (res) {
                 setArrTime(res)
             }
@@ -48,7 +48,6 @@ let Timer: React.FC = () => {
             setTime("")
         }
     }
-    console.log(arrTime)
 
     return (
         <>
