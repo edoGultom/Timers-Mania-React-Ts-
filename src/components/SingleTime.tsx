@@ -4,7 +4,6 @@ import { ITime } from '../models/ITypes';
 type Props = {
     time: ITime;
     // times: Array<ITime>;
-    // setTimes: React.Dispatch<React.SetStateAction<ITime[]>>;
 }
 
 const SingleTime = ({ time }: Props) => {

@@ -15,13 +15,8 @@ let Timer: React.FC = () => {
         getData({ key: 'times' }).then(res => {
             if (res) {
                 setArrTime(res)
-
             }
         })
-        // const storedUser = localStorage.getItem('times')
-        // if (storedUser) {
-        //     setArrTime(JSON.parse(storedUser))
-        // }
     }, []);
 
     let handleAdd = (e: React.FormEvent) => {
@@ -49,8 +44,6 @@ let Timer: React.FC = () => {
                 ]
             )
             storeData({ storageKey: 'times', value: [...arrTime, data] });
-
-            // storeData({ storageKey: 'times', value: [...times, data] });
 
             setTime("")
         }

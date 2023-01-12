@@ -13,10 +13,8 @@ const TimeList: React.FC<IProps> = ({ arrTime }) => {
             {
                 arrTime?.map((time, index) => (
                     <SingleTime
-                        // index={index}
-                        // times={times}
                         time={time}
-                        key={time.id}
+                        key={index}
                     // setTimes={setTimes}
                     />
                 ))
