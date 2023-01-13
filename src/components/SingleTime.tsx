@@ -4,9 +4,10 @@ import { ITime } from '../models/ITypes';
 type Props = {
     waktu: ITime;
     handleStart: (id: string) => void;
+    handleReset: (id: string) => void;
 }
 
-const SingleTime = ({ waktu, handleStart }: Props) => {
+const SingleTime = ({ waktu, handleStart, handleReset }: Props) => {
     return (
         <div className="card mb-2">
             <div className="card-header">
@@ -24,7 +25,7 @@ const SingleTime = ({ waktu, handleStart }: Props) => {
                         <button className='btn btn-info m-2'>
                             Pause
                         </button>
-                        <button className='btn btn-info m-2'>
+                        <button className='btn btn-info m-2' onClick={() => handleReset(waktu.id)}>
                             Reset
                         </button>
                     </div>

@@ -5,10 +5,11 @@ import SingleTime from './SingleTime';
 interface IProps {
     arrTime: Array<ITime>;
     handleStart: (id: string) => void;
+    handleReset: (id: string) => void;
     // setTimes: React.Dispatch<React.SetStateAction<ITime[]>>;
 }
 
-const TimeList: React.FC<IProps> = ({ arrTime, handleStart }) => {
+const TimeList: React.FC<IProps> = ({ arrTime, handleStart, handleReset }) => {
     return (
         <React.Fragment>
             {
@@ -17,6 +18,7 @@ const TimeList: React.FC<IProps> = ({ arrTime, handleStart }) => {
                         waktu={time}
                         key={index}
                         handleStart={handleStart}
+                        handleReset={handleReset}
                     // setTimes={setTimes}
                     />
                 ))

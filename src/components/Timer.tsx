@@ -1,13 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import toast, { Toaster } from 'react-hot-toast';
 import { ITime } from "../models/ITypes";
+import { showMessage } from "../utils/showMessage";
 import { getData, storeData } from "../utils/storage";
 import InputTimer from "./InputTimer";
 import TimeList from "./TimeList";
 
 let Timer: React.FC = () => {
-    let [counter, setCounter] = useState<number>(1);
+    let [counter, setCounter] = useState<number>(0);
     let [time, setTime] = useState<string>("");
     let [arrTime, setArrTime] = useState<ITime[]>([]);
+    const intervalRef = React.useRef<null | NodeJS.Timeout>(null);
 
     //cek data ada tidak di local storage
     useEffect(() => {
@@ -16,54 +19,63 @@ let Timer: React.FC = () => {
                 setArrTime(res)
             }
         })
+        getData({ storageKey: 'counter' }).then(res => {
+            if (res) {
+                setCounter(res)
+            }
+        })
     }, []);
 
 
     useEffect(() => {
-        const i = setInterval(() => {
+        intervalRef.current = setInterval(() => {
+            console.log('runs every 1 seconds');
             for (let i = 0; i < arrTime.length; i++) {
                 if (arrTime[i].status === "running") {
                     arrTime[i].time -= 1;
                 }
                 if (arrTime[i].time === 0 && arrTime[i].status === "running") {
                     arrTime[i].status = "stop";
-                    alert(`Timer ${i + 1} is done!`);
+                    showMessage({ message: `Timer ${i + 1} is done!`, status: 'success' });
                 }
-                let minutes = Math.floor(Number(arrTime[i].time) / 60);
-                let second = Number(arrTime[i].time) % 60;
-                let finalSecond = (second < 10) ? "0" + second : second;
-                let finalMinute = (minutes < 10) ? "0" + minutes : minutes;
-
-                let finalTime = finalMinute + ":" + finalSecond;
+                let finalTime = convertTime(arrTime[i].time)
                 arrTime[i].waktu = finalTime;
 
                 let newTodos = [...arrTime];
                 newTodos[i] = arrTime[i];
                 setArrTime(newTodos);
-                storeData({ storageKey: 'times', value: newTodos });
+                // storeData({ storageKey: 'times', value: arrTime });
             }
         }, 1000);
-        return () => clearTimeout(i);
+
+        return () => {
+            console.log('clearInterval');
+            return clearInterval(intervalRef.current as NodeJS.Timeout);
+        };
 
     }, [arrTime.length]);
+
+    const convertTime = (waktu: number) => {
+        let minutes = Math.floor(Number(waktu) / 60);
+        let second = Number(waktu) % 60;
+        let finalSecond = (second < 10) ? "0" + second : second;
+        let finalMinute = (minutes < 10) ? "0" + minutes : minutes;
+
+        let finalTime = finalMinute + ":" + finalSecond;
+        return finalTime;
+    }
 
     let handleAdd = (e: React.FormEvent) => {
         e.preventDefault();
         if (time) {
-            let minutes = Math.floor(Number(time) / 60);
-            let second = Number(time) % 60;
-            let finalSecond = (second < 10) ? "0" + second : second;
-            let finalMinute = (minutes < 10) ? "0" + minutes : minutes;
-            let finalTime = finalMinute + ":" + finalSecond;
-
-            setCounter(counter + 1);
-
+            counter += 1;
+            setCounter(counter);
             const data = {
-                id: 'timer-' + counter,
+                id: `time-${counter}`,
                 time: time,
                 status: 'stop',
                 original: Number(time),
-                waktu: finalTime,
+                waktu: convertTime(Number(time)),
             }
             setArrTime(
                 [
@@ -71,36 +83,44 @@ let Timer: React.FC = () => {
                     data
                 ]
             )
-
             storeData({ storageKey: 'times', value: [...arrTime, data] });
-
+            storeData({ storageKey: 'counter', value: counter });
             setTime("")
         }
     }
-
     let handleStart = (id: string) => {
         // update status time
         var data = [...arrTime];
         var index = arrTime.findIndex(obj => obj.id === id);
         data[index].status = 'running';
+        setArrTime(data);
         storeData({ storageKey: 'times', value: [...arrTime] });
     }
 
+    let handleReset = (id: string) => {
+        var data = [...arrTime];
+        var index = arrTime.findIndex(obj => obj.id === id);
+        data[index].time = data[index].original;
+
+        data[index].waktu = convertTime(data[index].time)
+        storeData({ storageKey: 'times', value: [...arrTime] });
+    }
     return (
         <>
+            <Toaster />
+
             <div className="container">
                 <div className="d-flex justify-content-between align-items-center">
                     <div className="p-2">
                         <p className="h1 display-5 fw-bold">Timers</p>
                     </div>
-
                     {/* Input Timer */}
                     <div className="p-2">
                         <InputTimer time={time} setTime={setTime} handleAdd={handleAdd} />
                     </div>
                 </div>
                 {/* Content Timer */}
-                <TimeList arrTime={arrTime} handleStart={handleStart} />
+                <TimeList arrTime={arrTime} handleStart={handleStart} handleReset={handleReset} />
             </div>
 
         </>
