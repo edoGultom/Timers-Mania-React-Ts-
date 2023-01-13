@@ -26,7 +26,7 @@ const SingleTime = ({ waktu, handleStart, handleReset, handlePause }: Props) => 
                         <button className='btn btn-warning m-2' onClick={() => handlePause(waktu.id)} disabled={waktu.status === 'stop' && true}>
                             Pause
                         </button>
-                        <button className='btn btn-danger m-2' onClick={() => handleReset(waktu.id)}>
+                        <button className='btn btn-danger m-2' onClick={() => handleReset(waktu.id)} disabled={waktu.time !== 0 && true}>
                             Reset
                         </button>
                     </div>
