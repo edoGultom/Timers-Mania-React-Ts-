@@ -5,9 +5,10 @@ type Props = {
     waktu: ITime;
     handleStart: (id: string) => void;
     handleReset: (id: string) => void;
+    handlePause: (id: string) => void;
 }
 
-const SingleTime = ({ waktu, handleStart, handleReset }: Props) => {
+const SingleTime = ({ waktu, handleStart, handleReset, handlePause }: Props) => {
     return (
         <div className="card mb-2">
             <div className="card-header">
@@ -19,13 +20,13 @@ const SingleTime = ({ waktu, handleStart, handleReset }: Props) => {
                         <h1 className="fw-bold">{waktu.waktu}</h1>
                     </div>
                     <div className="p-2 ">
-                        <button className='btn btn-info m-2' onClick={() => handleStart(waktu.id)}>
+                        <button className='btn btn-info m-2' onClick={() => handleStart(waktu.id)} disabled={waktu.status === 'running' && true}>
                             Start
                         </button>
-                        <button className='btn btn-info m-2'>
+                        <button className='btn btn-warning m-2' onClick={() => handlePause(waktu.id)} disabled={waktu.status === 'stop' && true}>
                             Pause
                         </button>
-                        <button className='btn btn-info m-2' onClick={() => handleReset(waktu.id)}>
+                        <button className='btn btn-danger m-2' onClick={() => handleReset(waktu.id)}>
                             Reset
                         </button>
                     </div>

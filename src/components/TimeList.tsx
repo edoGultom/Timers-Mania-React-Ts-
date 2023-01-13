@@ -6,10 +6,11 @@ interface IProps {
     arrTime: Array<ITime>;
     handleStart: (id: string) => void;
     handleReset: (id: string) => void;
+    handlePause: (id: string) => void;
     // setTimes: React.Dispatch<React.SetStateAction<ITime[]>>;
 }
 
-const TimeList: React.FC<IProps> = ({ arrTime, handleStart, handleReset }) => {
+const TimeList: React.FC<IProps> = ({ arrTime, handleStart, handleReset, handlePause }) => {
     return (
         <React.Fragment>
             {
@@ -19,6 +20,7 @@ const TimeList: React.FC<IProps> = ({ arrTime, handleStart, handleReset }) => {
                         key={index}
                         handleStart={handleStart}
                         handleReset={handleReset}
+                        handlePause={handlePause}
                     // setTimes={setTimes}
                     />
                 ))

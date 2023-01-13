@@ -31,20 +31,23 @@ let Timer: React.FC = () => {
         intervalRef.current = setInterval(() => {
             console.log('runs every 1 seconds');
             for (let i = 0; i < arrTime.length; i++) {
-                if (arrTime[i].status === "running") {
-                    arrTime[i].time -= 1;
-                }
-                if (arrTime[i].time === 0 && arrTime[i].status === "running") {
-                    arrTime[i].status = "stop";
-                    showMessage({ message: `Timer ${i + 1} is done!`, status: 'success' });
-                }
-                let finalTime = convertTime(arrTime[i].time)
-                arrTime[i].waktu = finalTime;
+                if (arrTime[i].time > 0) {
 
-                let newTodos = [...arrTime];
-                newTodos[i] = arrTime[i];
-                setArrTime(newTodos);
-                // storeData({ storageKey: 'times', value: arrTime });
+                    if (arrTime[i].status === "running") {
+                        arrTime[i].time -= 1;
+                    }
+                    if (arrTime[i].time === 0 && arrTime[i].status === "running") {
+                        arrTime[i].status = "stop";
+                        showMessage({ message: `Timer ${i + 1} is done!`, status: 'success' });
+                    }
+                    let finalTime = convertTime(arrTime[i].time)
+                    arrTime[i].waktu = finalTime;
+
+                    let newTodos = [...arrTime];
+                    newTodos[i] = arrTime[i];
+                    setArrTime(newTodos);
+                    storeData({ storageKey: 'times', value: arrTime });
+                }
             }
         }, 1000);
 
@@ -92,9 +95,13 @@ let Timer: React.FC = () => {
         // update status time
         var data = [...arrTime];
         var index = arrTime.findIndex(obj => obj.id === id);
-        data[index].status = 'running';
-        setArrTime(data);
-        storeData({ storageKey: 'times', value: [...arrTime] });
+        if (data[index].time > 0) {
+            data[index].status = 'running';
+            setArrTime(data);
+            storeData({ storageKey: 'times', value: [...arrTime] });
+        } else {
+            showMessage({ message: `Sorry, time is over, please reset before! and start again`, status: 'danger' });
+        }
     }
 
     let handleReset = (id: string) => {
@@ -103,6 +110,13 @@ let Timer: React.FC = () => {
         data[index].time = data[index].original;
 
         data[index].waktu = convertTime(data[index].time)
+        storeData({ storageKey: 'times', value: [...arrTime] });
+    }
+    let handlePause = (id: string) => {
+        var data = [...arrTime];
+        var index = arrTime.findIndex(obj => obj.id === id);
+        data[index].status = 'stop';
+        setArrTime(data);
         storeData({ storageKey: 'times', value: [...arrTime] });
     }
     return (
@@ -120,7 +134,7 @@ let Timer: React.FC = () => {
                     </div>
                 </div>
                 {/* Content Timer */}
-                <TimeList arrTime={arrTime} handleStart={handleStart} handleReset={handleReset} />
+                <TimeList arrTime={arrTime} handleStart={handleStart} handleReset={handleReset} handlePause={handlePause} />
             </div>
 
         </>
