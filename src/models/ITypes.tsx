@@ -3,6 +3,7 @@ export interface ITime {
     time: any;
     status: string;
     original: number;
+    waktu: string
 }
 
 export interface IMessage {
