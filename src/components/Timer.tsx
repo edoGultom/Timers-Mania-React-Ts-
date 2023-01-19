@@ -38,7 +38,7 @@ let Timer: React.FC = () => {
                             arrTime[i].time -= 1;
                         }
                         if (arrTime[i].time === 0 && arrTime[i].status === "running") {
-                            audio.play();
+                            isStart(!start)
                             arrTime[i].status = "stop";
                             showMessage({ message: `Timer ${i + 1} is done!`, status: 'success' });
                         }
@@ -62,7 +62,7 @@ let Timer: React.FC = () => {
         }
         return () => {
             isStart(!start)
-            audio.pause();
+            audio.play();
             console.log('clearInterval');
             return clearInterval(intervalRef.current as NodeJS.Timeout);
         };
