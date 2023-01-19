@@ -11,7 +11,7 @@ let Timer: React.FC = () => {
     let [time, setTime] = useState<string>("");
     let [arrTime, setArrTime] = useState<ITime[]>([]);
     const intervalRef = React.useRef<null | NodeJS.Timeout>(null);
-
+    const audio = new Audio('https://raw.githubusercontent.com/freeCodeCamp/cdn/master/build/testable-projects-fcc/audio/BeepSound.wav')
     //cek data ada tidak di local storage
     useEffect(() => {
         getData({ storageKey: 'times' }).then(res => {
@@ -37,6 +37,7 @@ let Timer: React.FC = () => {
                         arrTime[i].time -= 1;
                     }
                     if (arrTime[i].time === 0 && arrTime[i].status === "running") {
+                        audio.play();
                         arrTime[i].status = "stop";
                         showMessage({ message: `Timer ${i + 1} is done!`, status: 'success' });
                     }
@@ -52,6 +53,7 @@ let Timer: React.FC = () => {
         }, 1000);
 
         return () => {
+            audio.pause();
             console.log('clearInterval');
             return clearInterval(intervalRef.current as NodeJS.Timeout);
         };

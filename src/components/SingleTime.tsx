@@ -10,6 +10,10 @@ type Props = {
 
 const SingleTime = ({ waktu, handleStart, handleReset, handlePause }: Props) => {
     return (
+
+        // <div className="card-time">
+        //     <p className="h3 text-success"># {waktu.id}</p>
+        // </div>
         <div className="card mb-2">
             <div className="card-header">
                 <p className="h3 text-success"># {waktu.id}</p>
