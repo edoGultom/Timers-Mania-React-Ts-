@@ -24,7 +24,7 @@ const InputTimer: React.FC<IProps> = ({ time, setTime, handleAdd }) => {
                 className="form-control"
                 placeholder="How many seconds ?"
             />
-            <input type="submit" className="btn btn-primary m-2" value="Add" />
+            <input type="submit" className="btn m-2" value="Add" />
         </form>
     );
 };

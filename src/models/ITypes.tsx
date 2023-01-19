@@ -5,6 +5,9 @@ export interface ITime {
     original: number;
     waktu: string
 }
+export interface IInterval {
+    interval: any;
+}
 
 export interface IMessage {
     message: any;

@@ -8,6 +8,7 @@ import TimeList from "./TimeList";
 
 let Timer: React.FC = () => {
     let [counter, setCounter] = useState<number>(0);
+    let [start, isStart] = useState<boolean>(false);
     let [time, setTime] = useState<string>("");
     let [arrTime, setArrTime] = useState<ITime[]>([]);
     const intervalRef = React.useRef<null | NodeJS.Timeout>(null);
@@ -26,39 +27,46 @@ let Timer: React.FC = () => {
         })
     }, []);
 
-
     useEffect(() => {
-        intervalRef.current = setInterval(() => {
-            console.log('runs every 1 seconds');
-            for (let i = 0; i < arrTime.length; i++) {
-                if (arrTime[i].time > 0) {
+        if (start) {
+            intervalRef.current = setInterval(() => {
+                console.log('runs every 1 seconds');
+                for (let i = 0; i < arrTime.length; i++) {
 
-                    if (arrTime[i].status === "running") {
-                        arrTime[i].time -= 1;
-                    }
-                    if (arrTime[i].time === 0 && arrTime[i].status === "running") {
-                        audio.play();
-                        arrTime[i].status = "stop";
-                        showMessage({ message: `Timer ${i + 1} is done!`, status: 'success' });
-                    }
-                    let finalTime = convertTime(arrTime[i].time)
-                    arrTime[i].waktu = finalTime;
+                    if (arrTime[i].time > 0) {
+                        if (arrTime[i].status === "running") {
+                            arrTime[i].time -= 1;
+                        }
+                        if (arrTime[i].time === 0 && arrTime[i].status === "running") {
+                            audio.play();
+                            arrTime[i].status = "stop";
+                            showMessage({ message: `Timer ${i + 1} is done!`, status: 'success' });
+                        }
+                        let finalTime = convertTime(arrTime[i].time)
+                        arrTime[i].waktu = finalTime;
 
-                    let newTodos = [...arrTime];
-                    newTodos[i] = arrTime[i];
-                    setArrTime(newTodos);
-                    storeData({ storageKey: 'times', value: arrTime });
+                        let newTodos = [...arrTime];
+                        newTodos[i] = arrTime[i];
+                        setArrTime(newTodos);
+                        storeData({ storageKey: 'times', value: arrTime });
+                    }
                 }
-            }
-        }, 1000);
+            }, 1000);
 
+        } else if (!start) {
+            return () => {
+                audio.pause();
+                console.log('clearInterval');
+                return clearInterval(intervalRef.current as NodeJS.Timeout);
+            };
+        }
         return () => {
+            isStart(!start)
             audio.pause();
             console.log('clearInterval');
             return clearInterval(intervalRef.current as NodeJS.Timeout);
         };
-
-    }, [arrTime.length]);
+    }, [start]);
 
     const convertTime = (waktu: number) => {
         let minutes = Math.floor(Number(waktu) / 60);
@@ -98,6 +106,7 @@ let Timer: React.FC = () => {
         var data = [...arrTime];
         var index = arrTime.findIndex(obj => obj.id === id);
         if (data[index].time > 0) {
+            isStart(!start)
             data[index].status = 'running';
             setArrTime(data);
             storeData({ storageKey: 'times', value: [...arrTime] });
@@ -124,19 +133,26 @@ let Timer: React.FC = () => {
     return (
         <>
             <Toaster />
-
-            <div className="container">
-                <div className="d-flex justify-content-between align-items-center">
-                    <div className="p-2">
-                        <p className="h1 display-5 fw-bold">Timers</p>
+            <div className="containers" >
+                <div className="header">
+                    <div className="p-0">
+                        <p className="h3 fw-bold text-success text-center">Timers Mania</p>
+                        <p className=" text-center">This Web-App allows you to create as many timers as you want. Built by edo_gultom.</p>
                     </div>
-                    {/* Input Timer */}
-                    <div className="p-2">
-                        <InputTimer time={time} setTime={setTime} handleAdd={handleAdd} />
+                    <div className="p-0 d-flex flex-row justify-content-between align-items-center">
+                        <div className="p-2">
+                            <p className="h1 display-5 fw-bold">Timers</p>
+                        </div>
+                        <div className="p-2">
+                            <InputTimer time={time} setTime={setTime} handleAdd={handleAdd} />
+                        </div>
                     </div>
                 </div>
-                {/* Content Timer */}
-                <TimeList arrTime={arrTime} handleStart={handleStart} handleReset={handleReset} handlePause={handlePause} />
+                <div className="content">
+                    <div className="d-flex flex-row justify-content-start align-content-center flex-wrap gap-5 p-5">
+                        <TimeList arrTime={arrTime} handleStart={handleStart} handleReset={handleReset} handlePause={handlePause} />
+                    </div>
+                </div>
             </div>
 
         </>
