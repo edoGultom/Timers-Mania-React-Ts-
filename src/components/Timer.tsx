@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from "react";
-import toast, { Toaster } from 'react-hot-toast';
+import React, { useEffect, useState } from "react";
+import { Toaster } from 'react-hot-toast';
 import { ITime } from "../models/ITypes";
 import { showMessage } from "../utils/showMessage";
 import { getData, storeData } from "../utils/storage";
@@ -133,7 +133,7 @@ let Timer: React.FC = () => {
     return (
         <>
             <Toaster />
-            <div className="containers" >
+            <div className="containers">
                 <div className="header">
                     <div className="p-0">
                         <p className="h3 fw-bold text-success text-center">Timers Mania</p>
@@ -148,10 +148,8 @@ let Timer: React.FC = () => {
                         </div>
                     </div>
                 </div>
-                <div className="content">
-                    <div className="d-flex flex-row justify-content-start align-content-center flex-wrap gap-5 p-5">
-                        <TimeList arrTime={arrTime} handleStart={handleStart} handleReset={handleReset} handlePause={handlePause} />
-                    </div>
+                <div className="d-flex flex-wrap p-5 justify-content-center align-items-center">
+                    <TimeList arrTime={arrTime} handleStart={handleStart} handleReset={handleReset} handlePause={handlePause} />
                 </div>
             </div>
 

@@ -10,6 +10,7 @@ type Props = {
 
 const SingleTime = ({ waktu, handleStart, handleReset, handlePause }: Props) => {
     return (
+
         <div className="card-time">
             <p className="h3 text-success"># {waktu.id}</p>
             <div className="d-flex flex-column justify-content-between align-items-center">

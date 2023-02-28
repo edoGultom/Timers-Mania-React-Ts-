@@ -12,7 +12,8 @@ interface IProps {
 
 const TimeList: React.FC<IProps> = ({ arrTime, handleStart, handleReset, handlePause }) => {
     return (
-        <React.Fragment>
+        //basis-28 = 112px
+        <div className="d-flex flex-wrap md:flex-column justify-content-start md:justify-content-center align-items-center gap-5">
             {
                 arrTime?.map((time, index) => (
                     <SingleTime
@@ -25,8 +26,8 @@ const TimeList: React.FC<IProps> = ({ arrTime, handleStart, handleReset, handleP
                     />
                 ))
             }
+        </div>
 
-        </React.Fragment>
     );
 };
 
