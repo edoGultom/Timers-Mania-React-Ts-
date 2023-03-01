@@ -66,7 +66,7 @@ let Timer: React.FC = () => {
             console.log('clearInterval');
             return clearInterval(intervalRef.current as NodeJS.Timeout);
         };
-    }, [start, arrTime]);
+    }, [start, arrTime, audio]);
 
     const convertTime = (waktu: number) => {
         let minutes = Math.floor(Number(waktu) / 60);
